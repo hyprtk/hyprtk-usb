@@ -21,3 +21,7 @@ Dates are in `YYYY-MM-DD` format.
   - `--refresh` preserves an existing persistence partition's exact geometry.
   - A `--test` / `HYPRTK_USB_TEST=1` seam allows a regular-file target for
     smoke testing without hardware.
+
+- A peer **Python** implementation in `python/` (`rich` UI, hyprtk theme:
+  double-border panels, mauve/cyan palette, inline prompts). Same flags and
+  behaviour as the Go binary; `python -m unittest discover -s python/tests`.

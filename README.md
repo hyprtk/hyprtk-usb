@@ -8,6 +8,10 @@ It is the Go successor to the `hyprtk-usb` shell script: a single static binary,
 the same guardrails, plus a TUI with a device picker, live `dd` progress and an
 ISO check.
 
+There are two implementations with the same behaviour: a **Go** binary (this
+repo's root — static, released) and a peer **Python** one in [`python/`](python/)
+that renders the hyprtk look with `rich` (double-border panels, mauve/cyan).
+
 ## Usage
 
 ```bash
@@ -74,4 +78,5 @@ Requires `dd`, `sfdisk`, `mkfs.ext4`, `blkid`, `lsblk` and `findmnt` at runtime
 ```
 cmd/hyprtk-usb/    flags, TUI, non-interactive CLI
 internal/usb/      ISO + device discovery, planning, guardrails, writer (+ tests)
+python/            peer Python implementation (rich UI)
 ```
