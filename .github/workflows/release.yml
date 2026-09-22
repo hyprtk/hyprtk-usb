@@ -11,38 +11,46 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        goarch: [amd64, arm64]
     steps:
       - uses: actions/checkout@v4
 
-      - uses: actions/setup-go@v5
+      - uses: actions/setup-python@v5
         with:
-          go-version-file: go.mod
-          cache: true
+          python-version: "3.12"
 
-      - name: Vet and test
+      - name: Install
         run: |
-          go vet ./...
-          go test ./...
+          python -m pip install --upgrade pip
+          python -m pip install rich build
 
-      - name: Build
-        env:
-          CGO_ENABLED: "0"
-          GOOS: linux
-          GOARCH: ${{ matrix.goarch }}
+      - name: Test
+        working-directory: python
+        run: PYTHONPATH=. python -m unittest discover -s tests -v
+
+      - name: Build wheel + sdist
+        working-directory: python
+        run: python -m build
+
+      - name: Build single-file zipapp
         run: |
-          mkdir -p dist
-          go build -trimpath -ldflags "-s -w -X main.version=${GITHUB_REF_NAME}" \
-            -o "dist/hyprtk-usb-linux-${GOARCH}" ./cmd/hyprtk-usb
-          (cd dist && sha256sum "hyprtk-usb-linux-${GOARCH}" > "hyprtk-usb-linux-${GOARCH}.sha256")
+          rm -rf build/zipapp
+          mkdir -p build/zipapp
+          python -m pip install --quiet --target build/zipapp rich
+          cp -r python/hyprtk_usb build/zipapp/
+          printf 'import sys\nfrom hyprtk_usb.cli import main\nsys.exit(main())\n' > build/zipapp/__main__.py
+          python -m zipapp build/zipapp -o hyprtk-usb.pyz -p "/usr/bin/env python3"
+          sha256sum hyprtk-usb.pyz > hyprtk-usb.pyz.sha256
+
+      - name: Collect artifacts
+        run: |
+          mkdir -p out
+          cp python/dist/* out/
+          cp hyprtk-usb.pyz hyprtk-usb.pyz.sha256 out/
 
       - uses: actions/upload-artifact@v4
         with:
-          name: hyprtk-usb-linux-${{ matrix.goarch }}
-          path: dist/*
+          name: dist
+          path: out/*
 
   release:
     needs: build

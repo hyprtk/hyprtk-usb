@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "hyprtk-usb"
-version = "0.1.0"
+dynamic = ["version"]
 description = "Write a hyprtk ISO to a USB stick, with an optional persistence partition"
 readme = "README.md"
 requires-python = ">=3.10"
@@ -16,3 +16,6 @@ hyprtk-usb = "hyprtk_usb.cli:main"
 
 [tool.setuptools]
 packages = ["hyprtk_usb"]
+
+[tool.setuptools.dynamic]
+version = { attr = "hyprtk_usb.__version__" }

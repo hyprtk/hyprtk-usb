@@ -1,19 +1,27 @@
-BIN := bin/hyprtk-usb
-PKG := ./cmd/hyprtk-usb
+PY ?= python3
+PKG := python
 
-.PHONY: build test vet clean install
-
-build:
-	CGO_ENABLED=0 go build -trimpath -ldflags "-s -w" -o $(BIN) $(PKG)
+.PHONY: test wheel zipapp install clean
 
 test:
-	go test ./...
+	cd $(PKG) && PYTHONPATH=. $(PY) -m unittest discover -s tests
 
-vet:
-	go vet ./...
+wheel:
+	cd $(PKG) && $(PY) -m build
+
+# A single-file zipapp with rich vendored in (needs Python 3.10+ to run).
+zipapp:
+	rm -rf build/zipapp dist
+	mkdir -p build/zipapp dist
+	$(PY) -m pip install --quiet --target build/zipapp rich
+	cp -r $(PKG)/hyprtk_usb build/zipapp/
+	printf 'import sys\nfrom hyprtk_usb.cli import main\nsys.exit(main())\n' > build/zipapp/__main__.py
+	$(PY) -m zipapp build/zipapp -o dist/hyprtk-usb.pyz -p "/usr/bin/env python3"
+	@echo "built dist/hyprtk-usb.pyz"
+
+install:
+	cd $(PKG) && $(PY) -m pip install --user .
 
 clean:
-	rm -rf bin
-
-install: build
-	install -Dm755 $(BIN) $(HOME)/.local/bin/hyprtk-usb
+	rm -rf build dist $(PKG)/dist $(PKG)/*.egg-info
+	find $(PKG) -name __pycache__ -type d -prune -exec rm -rf {} +
