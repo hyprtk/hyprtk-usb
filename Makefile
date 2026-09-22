@@ -1,5 +1,7 @@
 PY ?= python3
 PKG := python
+VENV ?= $(HOME)/.local/share/hyprtk-usb/venv
+BINDIR ?= $(HOME)/.local/bin
 
 .PHONY: test wheel zipapp install clean
 
@@ -19,12 +21,20 @@ zipapp:
 	$(PY) -m zipapp build/zipapp -o dist/hyprtk-usb.pyz -p "/usr/bin/env python3"
 	@echo "built dist/hyprtk-usb.pyz"
 
+# Arch's Python is PEP 668 "externally managed", so install into a dedicated venv
+# with system site-packages (so it can see the system PyGObject/GTK) and expose
+# the console scripts on PATH by symlink. Mirrors how hyprtk-bar installs.
 install:
-	cd $(PKG) && $(PY) -m pip install --user .
+	$(PY) -m venv --system-site-packages $(VENV)
+	$(VENV)/bin/pip install --quiet --upgrade pip
+	$(VENV)/bin/pip install --quiet ./$(PKG)
+	for n in hyprtk-usb hyprtk-usb-gui hyprtk-usb-helper; do \
+		ln -sf $(VENV)/bin/$$n $(BINDIR)/$$n; \
+	done
 	install -Dm644 $(PKG)/data/hyprtk-usb.desktop $(HOME)/.local/share/applications/hyprtk-usb.desktop
 	install -Dm644 $(PKG)/data/hyprtk-usb.svg $(HOME)/.local/share/icons/hicolor/scalable/apps/hyprtk-usb.svg
 	-update-desktop-database $(HOME)/.local/share/applications 2>/dev/null || true
-	@echo "installed hyprtk-usb, hyprtk-usb-gui and the desktop entry"
+	@echo "installed into $(VENV); launchers linked into $(BINDIR)"
 
 clean:
 	rm -rf build dist $(PKG)/dist $(PKG)/*.egg-info
