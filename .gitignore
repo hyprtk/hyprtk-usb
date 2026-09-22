@@ -1,5 +1,5 @@
-/dist/
-/build/
+build/
+dist/
 __pycache__/
 *.pyc
 .venv/
