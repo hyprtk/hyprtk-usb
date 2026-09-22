@@ -13,6 +13,8 @@ dependencies = ["rich>=13"]
 
 [project.scripts]
 hyprtk-usb = "hyprtk_usb.cli:main"
+hyprtk-usb-helper = "hyprtk_usb.helper:main"
+hyprtk-usb-gui = "hyprtk_usb.gui:main"
 
 [tool.setuptools]
 packages = ["hyprtk_usb"]

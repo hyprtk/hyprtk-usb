@@ -7,7 +7,7 @@ stick and, optionally, add the **`hyprtk-persist`** partition the ISO's
 A Python app using [`rich`](https://github.com/Textualize/rich), carrying the
 hyprtk look: **double-border panels** with the **mauve (`#c084fc`) / cyan
 (`#22d3ee`)** palette resolved from pywal, as **inline prompts** — no full-screen
-takeover.
+takeover. There is also a **GTK 3 GUI** (`hyprtk-usb-gui`) over the same backend.
 
 ## Install
 
@@ -52,6 +52,23 @@ run. Writing needs root — the program re-execs itself under `sudo`.
 | `--tui` | force the interactive TUI |
 | `--version` | print the version |
 
+## GUI
+
+For a desktop session there is a GTK 3 front end over the same backend:
+
+```bash
+hyprtk-usb-gui
+```
+
+- **GTK 3 / PyGObject** — the same stack as hyprtk-bar, so it inherits the pywal GTK theme.
+- The GUI runs **unprivileged**; only the write is elevated, by running
+  `hyprtk_usb.helper` through **`pkexec`** (a polkit prompt). The GTK app never runs
+  as root, and pkexec's stripped environment can't break the display.
+- `make install` also installs a `.desktop` entry and icon, so it appears in the app menu.
+
+Requires `python-gobject` + GTK 3 (`gtk3`). The single-file zipapp does **not**
+carry the GUI — install the package (wheel / `pip install`) to get it.
+
 ## How it works
 
 1. Stream the ISO (iso-hybrid, MBR) onto the whole disk.
@@ -89,9 +106,12 @@ Runtime dependencies: `rich`, and `sfdisk`/`mkfs.ext4`/`blkid`/`lsblk`/`findmnt`
 ## Layout
 
 ```
-python/hyprtk_usb/core.py   ISO + device discovery, planning, guardrails, writer
-python/hyprtk_usb/ui.py     rich theme + hyprtk-styled panels and prompts
-python/hyprtk_usb/cli.py    flags + TUI / non-interactive flows
-python/tests/               unittest suite
-.github/workflows/          release workflow (wheel + sdist + zipapp)
+python/hyprtk_usb/core.py     ISO + device discovery, planning, guardrails, writer
+python/hyprtk_usb/ui.py       rich theme + hyprtk-styled panels and prompts
+python/hyprtk_usb/cli.py      flags + TUI / non-interactive flows
+python/hyprtk_usb/gui.py      GTK 3 app (unprivileged) over the same backend
+python/hyprtk_usb/helper.py   privileged write step, run via pkexec
+python/data/                  .desktop entry + icon
+python/tests/                 unittest suite
+.github/workflows/            release workflow (wheel + sdist + zipapp)
 ```

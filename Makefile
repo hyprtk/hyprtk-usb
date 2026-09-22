@@ -21,6 +21,10 @@ zipapp:
 
 install:
 	cd $(PKG) && $(PY) -m pip install --user .
+	install -Dm644 $(PKG)/data/hyprtk-usb.desktop $(HOME)/.local/share/applications/hyprtk-usb.desktop
+	install -Dm644 $(PKG)/data/hyprtk-usb.svg $(HOME)/.local/share/icons/hicolor/scalable/apps/hyprtk-usb.svg
+	-update-desktop-database $(HOME)/.local/share/applications 2>/dev/null || true
+	@echo "installed hyprtk-usb, hyprtk-usb-gui and the desktop entry"
 
 clean:
 	rm -rf build dist $(PKG)/dist $(PKG)/*.egg-info

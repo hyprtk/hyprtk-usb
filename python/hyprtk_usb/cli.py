@@ -8,28 +8,10 @@ import sys
 import time
 
 from . import __version__, core
+from .core import scan_isos  # noqa: F401  (re-exported for callers/tests)
 from .ui import UI
 
 SIZE_CHOICES = ["rest", "8G", "4G", "2G"]
-
-
-def scan_isos() -> list[str]:
-    """hyprtk ISOs newest-first, from ~/Documents/Isos and ~."""
-    home = os.path.expanduser("~")
-    found: list[tuple[float, str]] = []
-    for d in (os.path.join(home, "Documents", "Isos"), home):
-        try:
-            entries = os.listdir(d)
-        except OSError:
-            continue
-        for name in entries:
-            if not (name.startswith("hyprtk-") and name.endswith(".iso")):
-                continue
-            path = os.path.join(d, name)
-            if os.path.isfile(path):
-                found.append((os.path.getmtime(path), path))
-    found.sort(reverse=True)
-    return [p for _, p in found]
 
 
 def resolve_iso(explicit: str, runner: core.Runner) -> core.ISO:
@@ -42,9 +24,7 @@ def resolve_iso(explicit: str, runner: core.Runner) -> core.ISO:
 
 
 def resolve_target(runner: core.Runner, target: str, test_mode: bool) -> core.Device:
-    if test_mode and os.path.isfile(target):
-        return core.Device(path=target, name=os.path.basename(target), size=os.stat(target).st_size)
-    return core.find_device(runner, target)
+    return core.resolve_target(runner, target, test_mode)
 
 
 def build_validated(iso: core.ISO, dev: core.Device, args, runner: core.Runner, test_mode: bool) -> core.Plan:

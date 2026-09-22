@@ -3,6 +3,20 @@
 All notable changes to **hyprtk-usb** are documented in this file.
 Dates are in `YYYY-MM-DD` format.
 
+## [Unreleased]
+
+### Added
+
+- **GTK 3 GUI** (`hyprtk-usb-gui`) over the same `core` backend: an ISO picker
+  (auto-list + Browse), a device picker, options, a review page and a live
+  progress bar. It runs **unprivileged** — the write is performed by
+  `hyprtk_usb.helper` (`hyprtk-usb-helper`) launched through `pkexec`, so the GTK
+  app never runs as root and pkexec's stripped environment can't break the display.
+- A `.desktop` entry + icon under `python/data/`, installed by `make install`.
+- `core.resolve_target` (shared by the CLI, GUI and helper) and the
+  `hyprtk-usb-helper` / `hyprtk-usb-gui` console scripts.
+- A helper end-to-end test (runs the helper as a subprocess against file targets).
+
 ## [0.2.0] - 2026-09-22
 
 ### Added

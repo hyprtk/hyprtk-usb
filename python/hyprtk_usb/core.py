@@ -43,6 +43,25 @@ class ExecRunner(Runner):
 # ── ISO ────────────────────────────────────────────────────────────────────
 
 
+def scan_isos() -> list[str]:
+    """hyprtk ISOs newest-first, from ~/Documents/Isos and ~."""
+    home = os.path.expanduser("~")
+    found: list[tuple[float, str]] = []
+    for d in (os.path.join(home, "Documents", "Isos"), home):
+        try:
+            entries = os.listdir(d)
+        except OSError:
+            continue
+        for name in entries:
+            if not (name.startswith("hyprtk-") and name.endswith(".iso")):
+                continue
+            path = os.path.join(d, name)
+            if os.path.isfile(path):
+                found.append((os.path.getmtime(path), path))
+    found.sort(reverse=True)
+    return [p for _, p in found]
+
+
 @dataclass
 class ISO:
     path: str
@@ -146,6 +165,13 @@ def find_device(runner: Runner, path: str) -> Device:
         if d.path == path:
             return d
     raise UsbError(f"target: {path} is not a whole-disk block device")
+
+
+def resolve_target(runner: Runner, target: str, test_mode: bool = False) -> Device:
+    """Find the target device, or — in test mode only — accept a regular file."""
+    if test_mode and os.path.isfile(target):
+        return Device(path=target, name=os.path.basename(target), size=os.stat(target).st_size)
+    return find_device(runner, target)
 
 
 def root_disk(runner: Runner) -> str:
