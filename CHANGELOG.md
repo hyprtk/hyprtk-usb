@@ -7,7 +7,7 @@ Dates are in `YYYY-MM-DD` format.
 
 ### Added
 
-- **GTK 3 GUI** (`hyprtk-usb-gui`) over the same `core` backend: an ISO picker
+- **GTK 4 GUI** (`hyprtk-usb-gui`) over the same `core` backend: an ISO picker
   (auto-list + Browse), a device picker, options, a review page and a live
   progress bar. It runs **unprivileged** — the write is performed by
   `hyprtk_usb.helper` (`hyprtk-usb-helper`) launched through `pkexec`, so the GTK
@@ -16,6 +16,19 @@ Dates are in `YYYY-MM-DD` format.
 - `core.resolve_target` (shared by the CLI, GUI and helper) and the
   `hyprtk-usb-helper` / `hyprtk-usb-gui` console scripts.
 - A helper end-to-end test (runs the helper as a subprocess against file targets).
+
+### Changed
+
+- **The GUI is GTK 4.** Ported `python/hyprtk_usb/gui.py` from GTK 3 to GTK 4
+  (PyGObject `Gtk 4.0` / `Gdk 4.0`), matching hyprtk-bar: `set_child` + `append`
+  instead of `add`/`pack_*`, `add_css_class` and display-scoped
+  `add_provider_for_display` instead of `StyleContext`/`Gdk.Screen`, a
+  `Gtk.WindowHandle` for the header drag (replacing `add_events` +
+  `begin_move_drag`), and `Gtk.FileChooserDialog` driven by its `response`
+  signal with `get_file()` (`Gtk.FileChooser.get_filename` and `Dialog.run()`
+  are gone). Transparency is now CSS-only — GTK4 surfaces are RGBA by default,
+  so the app-paintable/rgba-visual dance is dropped. Behaviour and steps are
+  unchanged.
 
 ## [0.2.0] - 2026-09-22
 
