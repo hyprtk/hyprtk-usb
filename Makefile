@@ -22,7 +22,7 @@ zipapp:
 	@echo "built dist/hyprtk-usb.pyz"
 
 # Arch's Python is PEP 668 "externally managed", so install into a dedicated venv
-# with system site-packages (so it can see the system PyGObject/GTK) and expose
+# with system site-packages (so it can see the system PySide6/Qt) and expose
 # the console scripts on PATH by symlink. Mirrors how hyprtk-bar installs.
 install:
 	$(PY) -m venv --system-site-packages $(VENV)

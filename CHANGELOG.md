@@ -3,6 +3,19 @@
 All notable changes to **hyprtk-usb** are documented in this file.
 Dates are in `YYYY-MM-DD` format.
 
+## [0.4.0] - 2026-10-07
+
+### Changed
+
+- **The GUI is now Qt (PySide6)**, replacing the GTK 4 front end
+  (`python/hyprtk_usb/gui.py`). Same wizard flow over the same `core` backend.
+  The palette moved to a toolkit-free `hyprtk_usb.palette` module, so neither the
+  `rich` TUI nor the Qt GUI imports the other's toolkit; the window is themed by
+  a QSS stylesheet built from the running hyprtk-bar pywal palette. Distro
+  installs provide Qt via `python-pyside6`; pip users can
+  `pip install hyprtk-usb[gui]`.
+- Added a headless PySide6 smoke test (`tests/test_gui_smoke.py`).
+
 ## [0.3.0] - 2026-10-06
 
 ### Added
