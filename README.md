@@ -60,7 +60,7 @@ For a desktop session there is a Qt (PySide6) front end over the same backend:
 hyprtk-usb-gui
 ```
 
-- **Qt 6 / PySide6** — themed from the running hyprtk-bar pywal palette, so it
+- **Qt 6 / PySide6** — themed from the running hyprtk-bar-qt pywal palette, so it
   matches the desktop.
 - The GUI runs **unprivileged**; only the write is elevated, by running
   `hyprtk_usb.helper` through **`pkexec`** (a polkit prompt). The Qt app never runs
