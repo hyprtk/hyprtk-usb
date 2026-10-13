@@ -3,6 +3,15 @@
 All notable changes to **hyprtk-usb** are documented in this file.
 Dates are in `YYYY-MM-DD` format.
 
+## [0.4.6] - 2026-10-13
+
+### Fixed
+
+- **White border on the dropdown.** Only Fusion + a stylesheet were set, so
+  Fusion's own frames (e.g. the combo popup's container frame, which QSS doesn't
+  cover) used the default light palette and showed a white border. A dark
+  `QPalette` is now applied, so those frames render dark.
+
 ## [0.4.5] - 2026-10-13
 
 ### Fixed
