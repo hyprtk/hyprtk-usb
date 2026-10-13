@@ -3,6 +3,14 @@
 All notable changes to **hyprtk-usb** are documented in this file.
 Dates are in `YYYY-MM-DD` format.
 
+## [0.4.5] - 2026-10-13
+
+### Fixed
+
+- **Dropdown menu borders.** The combo popup's border used `color6` (a light
+  grey in many palettes) and drew a box around the current item; it now uses the
+  accent colour, with no per-item box.
+
 ## [0.4.4] - 2026-10-13
 
 ### Fixed
