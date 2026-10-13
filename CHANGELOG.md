@@ -3,6 +3,13 @@
 All notable changes to **hyprtk-usb** are documented in this file.
 Dates are in `YYYY-MM-DD` format.
 
+## [0.4.2] - 2026-10-13
+
+### Changed
+
+- **Removed stale GTK references** — the Qt port's docstrings and comments no
+  longer describe the former GTK 4 front end.
+
 ## [0.4.1] - 2026-10-13
 
 ### Fixed
