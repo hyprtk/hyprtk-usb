@@ -3,6 +3,14 @@
 All notable changes to **hyprtk-usb** are documented in this file.
 Dates are in `YYYY-MM-DD` format.
 
+## [0.4.3] - 2026-10-13
+
+### Fixed
+
+- **Themed file chooser.** The **Browse…** dialog used the platform/portal
+  chooser (GTK-styled, ignoring the app theme). It is now a non-native Qt dialog
+  styled by the app stylesheet (frosted panel, accent selection rows).
+
 ## [0.4.2] - 2026-10-13
 
 ### Changed
