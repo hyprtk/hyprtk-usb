@@ -3,6 +3,18 @@
 All notable changes to **hyprtk-usb** are documented in this file.
 Dates are in `YYYY-MM-DD` format.
 
+## [0.4.4] - 2026-10-13
+
+### Fixed
+
+- **File-chooser icons now match the session.** It used the `hicolor` theme, so
+  folder icons ignored the pywal colour papirus-folders applies. The app now
+  adopts the desktop icon theme (`gtk-icon-theme-name`, i.e. `Papirus-Dark`).
+- **Combo down-arrow + popup styling.** The down-arrow rendered as a block (the
+  QSS border-triangle isn't supported by Qt6); it is now a themed SVG chevron.
+  The dropdown menu was restyled (border, radius, per-item padding, accent
+  selection).
+
 ## [0.4.3] - 2026-10-13
 
 ### Fixed
