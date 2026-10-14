@@ -75,7 +75,7 @@ Dates are in `YYYY-MM-DD` format.
   The palette moved to a toolkit-free `hyprtk_usb.palette` module, so neither the
   `rich` TUI nor the Qt GUI imports the other's toolkit; the window is themed by
   a QSS stylesheet built from the running hyprtk-bar pywal palette. Distro
-  installs provide Qt via `python-pyside6`; pip users can
+  installs provide Qt via the system PySide6 (`pyside6` on Arch); pip users can
   `pip install hyprtk-usb[gui]`.
 - Added a headless PySide6 smoke test (`tests/test_gui_smoke.py`).
 
